@@ -7,15 +7,6 @@ import requests
 from telegram import Bot
 from datetime import datetime,timezone
 
-from telegram import Bot
-
-def tg_test():
-    bot = Bot(token=os.environ['TG_TOKEN'])
-    try:
-        bot.send_message(chat_id=os.environ['TG_CHAT_ID'], text="✅ BOT EN LIGNE – TEST", parse_mode="HTML")
-        print("Message test Telegram envoyé.")
-    except Exception as e:
-        print(f"[Telegram TEST ERROR] {e}")
 
 TOKEN   = os.environ['TG_TOKEN']
 CHAT_ID = os.environ['TG_CHAT_ID']

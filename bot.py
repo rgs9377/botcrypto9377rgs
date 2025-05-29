@@ -33,7 +33,6 @@ def analyze_pair(pair):
     except Exception as e:
         print(f"Erreur lors de la récupération des données pour {pair}: {e}")
         return
-
     df = pd.DataFrame(candles, columns=['ts', 'o', 'h', 'l', 'c', 'v'])
     df['dt'] = pd.to_datetime(df['ts'], unit='ms')
     df.set_index('dt', inplace=True)
@@ -48,34 +47,21 @@ def analyze_pair(pair):
     price = df['c'].iloc[-1]
     now = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')
 
-    # 🔔 ENVOI des infos même sans signal
-    infos = (
-        f"📊 Analyse {pair}\n"
-        f"Prix : <code>{price:.5f}</code>\n"
-        f"RSI : {rsi:.1f}\n"
-        f"EMA20 : {df['ema20'].iloc[-1]:.2f}\n"
-        f"EMA50 : {df['ema50'].iloc[-1]:.2f}\n"
-        f"{now} UTC"
-    )
-    tg_send(infos)  # 👈 Ce message partira à chaque analyse
-
-    # 🎯 Conditions de signal
     side = None
     if bull and rsi < 30 and sent > -0.2:
         side = '🟢 LONG'
     elif not bull and rsi > 70 and sent < 0.2:
         side = '🔴 SHORT'
     else:
-        return  # aucun signal = rien d'autre à faire
+        return  # aucun signal
 
     if side:
-        tg_msg = (
-            f"<b>{side} {pair}</b>\n"
-            f"Prix : <code>{price:.5f}</code>\n"
-            f"RSI : {rsi:.1f}\n"
-            f"{now} UTC"
-        )
-        tg_send(tg_msg)
+           tg_msg = (
+        f"<b>{side} {pair}</b>\n"
+        f"Prix : <code>{price:.5f}</code>\n"
+        f"RSI : {rsi:.1f}\n"
+        f"{now} UTC"
+    )
         
 
 

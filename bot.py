@@ -57,12 +57,19 @@ def analyze_pair(pair):
 
     side = None
     if bull and rsi < 30 and sent > -0.2:
-        side = 'BUY'
+        side = '🟢 LONG'
     elif not bull and rsi > 70 and sent < 0.2:
-        side = 'SELL'
+        side = '🔴 SHORT'
+    else:
+        return  # aucun signal
 
     if side:
-        msg = f"<b>{side} {pair}</b>\nPrix : <code>{price:.2f}</code>\nRSI : {rsi:.1f}\n{now} UTC"
+            msg = (
+        f"<b>{side} {pair}</b>\n"
+        f"Prix : <code>{price:.5f}</code>\n"
+        f"RSI : {rsi:.1f}\n"
+        f"{now} UTC"
+    )
         tg_send(msg)
 
 

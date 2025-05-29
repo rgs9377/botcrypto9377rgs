@@ -64,7 +64,7 @@ def analyze_pair(pair):
         return  # aucun signal
 
     if side:
-            msg = (
+           tg_msg = (
         f"<b>{side} {pair}</b>\n"
         f"Prix : <code>{price:.5f}</code>\n"
         f"RSI : {rsi:.1f}\n"
@@ -74,7 +74,6 @@ def analyze_pair(pair):
 
 
 def main():
-    tg_test()
     for pair in PAIRS:
         analyze_pair(pair)
         time.sleep(1.2)

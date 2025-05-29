@@ -70,7 +70,7 @@ def analyze_pair(pair):
         f"RSI : {rsi:.1f}\n"
         f"{now} UTC"
     )
-        tg_send(msg)
+        
 
 
 def main():

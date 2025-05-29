@@ -3,3 +3,4 @@ pandas
 pandas_ta
 requests
 numpy<1.24
+python-telegram-bot==13.15

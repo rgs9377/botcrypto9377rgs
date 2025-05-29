@@ -67,6 +67,7 @@ def analyze_pair(pair):
 
 def main():
     for pair in PAIRS:
+        print(f"🔍 Analyse de {pair}")
         analyze_pair(pair)
         time.sleep(1.2)
 

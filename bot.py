@@ -1,16 +1,17 @@
-#!/usr/bin/env python3
-"""
-Analyse EMA/RSI + filtre actu (optionnel) et envoie les signaux Telegram.
-Aucune exécution d'ordre. Conçu pour GitHub Actions (public repo).
-"""
-import os, requests, ccxt, pandas as pd, pandas_ta as ta
+import os
+import time
+import ccxt
+import pandas as pd
+import pandas_ta as ta
+import requests
 from datetime import datetime, timezone
 
 TOKEN   = os.environ['TG_TOKEN']
 CHAT_ID = os.environ['TG_CHAT_ID']
-PAIR    = os.getenv('PAIR', 'BTC/USDT')
-TF      = os.getenv('TF', '15m')
 CP_KEY  = os.getenv('CP_KEY', '')
+
+PAIRS = ['BTC/USD', 'ETH/USD', 'ADA/USD', 'SHIB/USD', 'XRP/USD', 'DOGE/USD']
+TF = '15m'
 
 def tg_send(text: str):
     url = f'https://api.telegram.org/bot{TOKEN}/sendMessage'
@@ -27,9 +28,13 @@ def get_sentiment() -> float:
     except:
         return 0.0
 
-def main():
-    ex = ccxt.binance()
-    candles = ex.fetch_ohlcv(PAIR, TF, limit=100)
+def analyze_pair(pair):
+    ex = ccxt.kraken()
+    try:
+        candles = ex.fetch_ohlcv(pair, TF, limit=100)
+    except Exception as e:
+        print(f"Erreur lors de la récupération des données pour {pair}: {e}")
+        return
     df = pd.DataFrame(candles, columns=['ts', 'o', 'h', 'l', 'c', 'v'])
     df['dt'] = pd.to_datetime(df['ts'], unit='ms')
     df.set_index('dt', inplace=True)
@@ -51,8 +56,13 @@ def main():
         side = 'SELL'
 
     if side:
-        msg = f"<b>{side} {PAIR}</b>\nPrix : <code>{price:.2f}</code>\nRSI : {rsi:.1f}\n{now} UTC"
+        msg = f"<b>{side} {pair}</b>\nPrix : <code>{price:.2f}</code>\nRSI : {rsi:.1f}\n{now} UTC"
         tg_send(msg)
+
+def main():
+    for pair in PAIRS:
+        analyze_pair(pair)
+        time.sleep(1.2)  # Pour éviter le rate limit de Telegram
 
 if __name__ == '__main__':
     main()

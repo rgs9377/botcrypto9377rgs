@@ -4,7 +4,8 @@ import ccxt
 import pandas as pd
 import pandas_ta as ta
 import requests
-from datetime import datetime, timezone
+from telegram import Bot
+from datetime import datetime,timezone
 
 TOKEN   = os.environ['TG_TOKEN']
 CHAT_ID = os.environ['TG_CHAT_ID']
@@ -13,9 +14,13 @@ CP_KEY  = os.getenv('CP_KEY', '')
 PAIRS = ['BTC/USD', 'ETH/USD', 'ADA/USD', 'SHIB/USD', 'XRP/USD', 'DOGE/USD']
 TF = '15m'
 
+
 def tg_send(text: str):
-    url = f'https://api.telegram.org/bot{TOKEN}/sendMessage'
-    requests.post(url, json={'chat_id': CHAT_ID, 'text': text, 'parse_mode': 'HTML'}, timeout=10)
+    bot = Bot(token=os.environ['TG_TOKEN'])
+    try:
+        bot.send_message(chat_id=os.environ['TG_CHAT_ID'], text=text, parse_mode="HTML")
+    except Exception as e:
+        print(f"[Telegram Error] {e}")
 
 def get_sentiment() -> float:
     if not CP_KEY:

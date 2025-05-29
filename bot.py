@@ -10,8 +10,8 @@ from datetime import datetime,timezone
 from telegram import Bot
 
 def tg_test():
+    bot = Bot(token=os.environ['TG_TOKEN'])
     try:
-        bot = Bot(token=os.environ['TG_TOKEN'])
         bot.send_message(chat_id=os.environ['TG_CHAT_ID'], text="✅ BOT EN LIGNE – TEST", parse_mode="HTML")
         print("Message test Telegram envoyé.")
     except Exception as e:
@@ -74,12 +74,12 @@ def analyze_pair(pair):
         msg = f"<b>{side} {pair}</b>\nPrix : <code>{price:.2f}</code>\nRSI : {rsi:.1f}\n{now} UTC"
         tg_send(msg)
 
+
 def main():
-tg_test()  # test en tout début
+    tg_test()
     for pair in PAIRS:
         analyze_pair(pair)
         time.sleep(1.2)
-
 
 if __name__ == '__main__':
     main()

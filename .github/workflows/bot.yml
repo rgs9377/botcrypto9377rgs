@@ -22,6 +22,6 @@ jobs:
           TG_TOKEN: ${{ secrets.TG_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           CP_KEY: ${{ secrets.CP_KEY }}
-          PAIR: BTC/USDT,ETH/USDT,ADA/USDT,SHIB/USDT,XRP/USDT,DOGE/USDT
+          PAIR: BTC/USD,ETH/USD,ADA/USD,SHIB/USD,XRP/USD,DOGE/USD
           TF: 1h
         run: python bot.py

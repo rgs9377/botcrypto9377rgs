@@ -13,7 +13,7 @@ CHAT_ID = os.environ['TG_CHAT_ID']
 CP_KEY  = os.getenv('CP_KEY', '')
 
 PAIRS = ['BTC/USD', 'ETH/USD', 'ADA/USD', 'SHIB/USD', 'XRP/USD', 'DOGE/USD']
-TF = '15m'
+TF = '1h'
 
 
 def tg_send(text: str):
@@ -24,14 +24,6 @@ def tg_send(text: str):
         print(f"[Telegram Error] {e}")
 
 def get_sentiment() -> float:
-    if not CP_KEY:
-        return 0.0
-    try:
-        url = 'https://cryptopanic.com/api/v1/posts/'
-        r = requests.get(url, params={'auth_token': CP_KEY, 'public': 'true'}, timeout=10).json()
-        news = r.get('results', [])[:50]
-        return sum(1 if n.get('positive') else -1 for n in news) / len(news) if news else 0.0
-    except:
         return 0.0
 
 def analyze_pair(pair):
